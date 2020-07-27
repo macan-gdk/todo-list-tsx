@@ -6,10 +6,17 @@ interface TodoListItemProps {
     toggleComplete: ToggleComplete;
     deleteTodo: DeleteTodo;
     editTodo: EditTodo;
+    changeStatus: ChangeStatus;
+    toggle: () => void;
 
 }
 
-const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete, deleteTodo, editTodo }) => {
+const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete, deleteTodo, editTodo, changeStatus, toggle }) => {
+
+    const edit = () => {
+        editTodo(todo);
+        toggle()
+    }
     return (
         <List>
             <CheckBox type="checkbox"
@@ -20,7 +27,7 @@ const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete, delet
                 {todo.text}
             </Text>
             <ButtonForm>
-                <PrimaryButton onClick={() => editTodo(todo)} >Sửa</PrimaryButton>
+                <PrimaryButton onClick={() => edit()} >Sửa</PrimaryButton>
                 <Button onClick={() => deleteTodo(todo)} >Xóa</Button>
             </ButtonForm>
         </List>

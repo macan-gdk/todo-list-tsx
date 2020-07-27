@@ -5,9 +5,9 @@ export const List = styled.ul`
     min-height:400px;
     margin: 0;
     padding : 0px;
-    
-    /* border: 1px solid #333333; */
-    /* border-radius: 5px; */
+    margin: 0 auto;
+    border: 1px solid #333333;
+    border-radius: 5px;
     
 `;
 export const Header = styled.div`

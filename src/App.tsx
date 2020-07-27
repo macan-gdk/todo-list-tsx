@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import TodoList from './todoList/todoList';
-import EditTodoForm from './todoList/editTodoForm';
-import Menu from './Menu/Menu';
-import styled from 'styled-components';
+
 
 const initialTodos: Array<Todo> = [
     { id: 1, text: "Trăm năm trong cõi người ta", complete: true },
@@ -14,19 +12,14 @@ const initialTodos: Array<Todo> = [
     { id: 7, text: "Cảo thơm lần giở trước đèn", complete: false }
 ];
 
-const FormTodo = styled.div`
-    display: flex;
-    border: 1px solid #333333;
-    width: 800px;
-    justify-content:space-between;
-    margin: 0 auto;
-`;
+
 
 const App: React.FC = () => {
     const [todos, setTodos] = useState(initialTodos);
     const temptodos = [...initialTodos]
-
     const [editing, setEditing] = useState<any>({ id: 0, text: "", complete: false });
+    const [changeStatus, setChangeStatus] = useState<any>(false);
+
     const toggleComplete: ToggleComplete = selectedTodo => {
         const updatedTodos = todos.map(todo => {
             if (todo === selectedTodo) {
@@ -40,13 +33,15 @@ const App: React.FC = () => {
     const addTodo: AddTodo = (newTodo, id) => {
         newTodo.trim() !== "" &&
             setTodos([...todos, { id: id, text: newTodo, complete: false }])
+        setChangeStatus(changeStatus);
     };
 
     const editTodo: EditTodo = todo => {
         setEditing(todo);
+        setChangeStatus(!changeStatus);
     };
 
-    const pushedit: PushEdit = (id, text, complete) => {
+    const pushedit: PushEdit = (id, text, complete, status) => {
         let newTodo = [...todos];
         newTodo.forEach((value, key) => {
             if (value.id === id) {
@@ -55,8 +50,8 @@ const App: React.FC = () => {
             }
         })
         setTodos(newTodo);
+        setChangeStatus(!changeStatus);
     };
-
     const deleteTodo: DeleteTodo = selectedTodo => {
         const index = todos.findIndex(x => x.id === selectedTodo.id);
         const newTodos = [...todos];
@@ -74,23 +69,18 @@ const App: React.FC = () => {
             setTodos(newTodos);
         }
     };
+    console.log(changeStatus);
     return (
-        <div>
-            <EditTodoForm editing={editing}
-                pushedit={pushedit}
-            />
-            <FormTodo>
-                <Menu />
-                <TodoList todos={todos}
-                    toggleComplete={toggleComplete}
-                    deleteTodo={deleteTodo}
-                    editTodo={editTodo}
-                    onSearch={onSearch}
-                    addTodo={addTodo}
-                />
-            </FormTodo>
-
-        </div>
+        <TodoList todos={todos}
+            toggleComplete={toggleComplete}
+            deleteTodo={deleteTodo}
+            editTodo={editTodo}
+            onSearch={onSearch}
+            addTodo={addTodo}
+            editing={editing}
+            pushedit={pushedit}
+            changeStatus={changeStatus}
+        />
     );
 }
 export default App;
